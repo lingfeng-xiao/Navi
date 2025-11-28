@@ -1,0 +1,129 @@
+{
+	"info": {
+		"_postman_id": "77a04eb6-db85-451c-a732-3ccbe1da1f02",
+		"name": "Configurable Assertion API Test",
+		"description": "Postman Collection 示例，支持配置化断言和批量数据驱动",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25230906"
+	},
+	"item": [
+		{
+			"name": "Test API",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// 获取迭代数据",
+							"const data = pm.iterationData?.toObject?.() || {};",
+							"// Collection 默认字段",
+							"const commonFields = { channel: 'app', version: '1.0' };",
+							"// 构建请求体函数",
+							"function buildRequestBody(common, params) {",
+							"    return { ...common, ...(params || {}) };",
+							"}",
+							"// 更新请求体",
+							"pm.variables.set(\"request\", JSON.stringify(buildRequestBody(commonFields, data.params), null, 2));"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// 获取迭代数据和响应",
+							"const data = pm.iterationData?.toObject?.() || {};",
+							"const res = pm.response.json();",
+							"// 获取嵌套字段",
+							"const getNested = (obj, path) => path.split('.').reduce((o,k)=>o?.[k], obj);",
+							"// 断言处理器字典",
+							"const assertionHandlers = {",
+							"    equals: (value, expected) => pm.expect(value).to.eql(expected),",
+							"    equalsFrom: (value, fromPath) => pm.expect(value).to.eql(getNested(data, fromPath)),",
+							"    greaterThan: (value, expected) => pm.expect(value).to.be.above(expected),",
+							"    lessThan: (value, expected) => pm.expect(value).to.be.below(expected),",
+							"    include: (value, expected) => pm.expect(value).to.include(expected),",
+							"    matchRegex: (value, regex) => pm.expect(value).to.match(new RegExp(regex))",
+							"};",
+							"// 执行单条断言函数",
+							"const executeAssertion = ({type, path, value, from}) => {",
+							"    const actual = getNested(res, path);",
+							"    const handler = assertionHandlers[type];",
+							"    if (!handler) throw new Error(`未知断言类型: ${type}`);",
+							"    pm.test(`${data.scenario} - ${path} - ${type}`, () => {",
+							"        if (value !== undefined) handler(actual, value);",
+							"        else if (from !== undefined) handler(actual, from);",
+							"    });",
+							"};",
+							"// 遍历断言配置",
+							"(data.assertions || []).forEach(executeAssertion);"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{request}}"
+				},
+				"url": {
+					"raw": "{{url}}/test",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"test"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Test API",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}"
+						},
+						"url": {
+							"raw": "/test",
+							"path": [
+								"test"
+							]
+						}
+					},
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n  \"code\": 0,\r\n  \"message\": \"操作成功\",\r\n  \"data\": {\r\n    \"userId\": 1001,\r\n    \"amount\": 500\r\n  }\r\n}\r\n"
+				}
+			]
+		}
+	]
+}
