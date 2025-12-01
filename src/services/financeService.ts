@@ -69,7 +69,7 @@ export class FinanceService {
   /**
    * 删除支出
    */
-  static async deleteExpense(id: string): Promise<boolean> {
+  static async deleteExpense(_id: string): Promise<boolean> {
     try {
       // 实际项目中这里应该是API请求
       // const response = await fetch(`/api/expenses/${id}`, {
@@ -154,12 +154,12 @@ export class FinanceService {
       
       // 模拟API响应
       return [
-        { id: '1', name: '餐饮', color: '#ef4444' },
-        { id: '2', name: '交通', color: '#3b82f6' },
-        { id: '3', name: '购物', color: '#8b5cf6' },
-        { id: '4', name: '娱乐', color: '#ec4899' },
-        { id: '5', name: '医疗', color: '#10b981' },
-        { id: '6', name: '住房', color: '#f59e0b' }
+        { id: '1', name: '餐饮', icon: '🍽️', color: '#ef4444' },
+        { id: '2', name: '交通', icon: '🚗', color: '#3b82f6' },
+        { id: '3', name: '购物', icon: '🛍️', color: '#8b5cf6' },
+        { id: '4', name: '娱乐', icon: '🎬', color: '#ec4899' },
+        { id: '5', name: '医疗', icon: '🏥', color: '#10b981' },
+        { id: '6', name: '住房', icon: '🏠', color: '#f59e0b' }
       ]
     } catch (error) {
       console.error('获取类别列表失败:', error)
