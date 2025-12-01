@@ -32,6 +32,9 @@
   --background-color: #FFFFFF;
   --surface-color: #F9FAFB;
   --card-color: #FFFFFF;
+  /* 背景颜色变量（兼容规范要求） */
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F9FAFB;
   --text-primary: #111827;
   --text-secondary: #4B5563;
   --text-tertiary: #9CA3AF;
@@ -121,6 +124,9 @@
   --background-color: #111827;
   --surface-color: #1F2937;
   --card-color: #374151;
+  /* 背景颜色变量（兼容规范要求） */
+  --bg-primary: #111827;
+  --bg-secondary: #1F2937;
   --text-primary: #F9FAFB;
   --text-secondary: #E5E7EB;
   --text-tertiary: #9CA3AF;

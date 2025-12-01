@@ -1,40 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-
-// 定义数据类型
-export interface Expense {
-  id: string
-  amount: number
-  category: string
-  date: string
-  description: string
-  tags: string[]
-}
-
-export interface Income {
-  id: string
-  amount: number
-  source: string
-  date: string
-  description: string
-}
-
-export interface Debt {
-  id: string
-  name: string
-  totalAmount: number
-  remainingAmount: number
-  interestRate: number
-  dueDate: string
-  status: 'active' | 'paid' | 'overdue'
-}
-
-export interface Category {
-  id: string
-  name: string
-  icon: string
-  color: string
-}
+import type { Expense, Income, Debt, Category } from '@/types/finance'
 
 // 财务数据store
 export const useFinanceStore = defineStore('finance', () => {

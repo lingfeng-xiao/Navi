@@ -1,105 +1,108 @@
 <template>
-  <div class="dashboard-view">
-    <div class="content-section">
-      <h1 class="section-title">财务概览</h1>
+  <div class="dashboard">
+    <div class="dashboard__section">
+      <h1 class="dashboard__title">财务概览</h1>
       
       <!-- 统计卡片区域 -->
-      <div class="dashboard-cards">
+      <div class="dashboard__cards">
         <!-- 总收入卡片 -->
-        <div class="card stats-card">
-          <div class="stats-card-icon">💰</div>
-          <div class="stats-card-value">
+        <Card class="dashboard__stats-card">
+          <div class="dashboard__stats-icon">💰</div>
+          <div class="dashboard__stats-value">
             {{ formatCurrency(financeStore.totalIncome) }}
           </div>
-          <div class="stats-card-label">总收入</div>
-          <div class="stats-card-change positive">
+          <div class="dashboard__stats-label">总收入</div>
+          <div class="dashboard__stats-change dashboard__stats-change--positive">
             <span>↗</span>
             <span>+12.5%</span>
             <span>相比上月</span>
           </div>
-        </div>
+        </Card>
         
         <!-- 总支出卡片 -->
-        <div class="card stats-card">
-          <div class="stats-card-icon">💸</div>
-          <div class="stats-card-value">
+        <Card class="dashboard__stats-card">
+          <div class="dashboard__stats-icon">💸</div>
+          <div class="dashboard__stats-value">
             {{ formatCurrency(financeStore.totalExpenses) }}
           </div>
-          <div class="stats-card-label">总支出</div>
-          <div class="stats-card-change negative">
+          <div class="dashboard__stats-label">总支出</div>
+          <div class="dashboard__stats-change dashboard__stats-change--negative">
             <span>↘</span>
             <span>-8.2%</span>
             <span>相比上月</span>
           </div>
-        </div>
+        </Card>
         
         <!-- 净收入卡片 -->
-        <div class="card stats-card">
-          <div class="stats-card-icon">📊</div>
-          <div class="stats-card-value" :class="{ 'text-danger': financeStore.netIncome < 0 }">
+        <Card class="dashboard__stats-card">
+          <div class="dashboard__stats-icon">📊</div>
+          <div class="dashboard__stats-value" :class="{ 'dashboard__text-danger': financeStore.netIncome < 0 }">
             {{ formatCurrency(financeStore.netIncome) }}
           </div>
-          <div class="stats-card-label">净收入</div>
-          <div class="stats-card-change" :class="{ 'positive': financeStore.netIncome > 0, 'negative': financeStore.netIncome < 0 }">
+          <div class="dashboard__stats-label">净收入</div>
+          <div class="dashboard__stats-change" :class="{ 
+            'dashboard__stats-change--positive': financeStore.netIncome > 0, 
+            'dashboard__stats-change--negative': financeStore.netIncome < 0 
+          }">
             <span>{{ financeStore.netIncome > 0 ? '↗' : '↘' }}</span>
             <span>{{ financeStore.netIncome > 0 ? '+15.3%' : '-5.2%' }}</span>
             <span>相比上月</span>
           </div>
-        </div>
+        </Card>
         
         <!-- 总债务卡片 -->
-        <div class="card stats-card">
-          <div class="stats-card-icon">💳</div>
-          <div class="stats-card-value">
+        <Card class="dashboard__stats-card">
+          <div class="dashboard__stats-icon">💳</div>
+          <div class="dashboard__stats-value">
             {{ formatCurrency(financeStore.totalDebt) }}
           </div>
-          <div class="stats-card-label">总债务</div>
-          <div class="stats-card-change negative">
+          <div class="dashboard__stats-label">总债务</div>
+          <div class="dashboard__stats-change dashboard__stats-change--negative">
             <span>↘</span>
             <span>-3.8%</span>
             <span>相比上月</span>
           </div>
-        </div>
+        </Card>
       </div>
     </div>
     
     <!-- 图表区域 -->
-    <div class="content-section">
-      <h2 class="section-title">财务分析</h2>
+    <div class="dashboard__section">
+      <h2 class="dashboard__title">财务分析</h2>
       
-      <div class="dashboard-charts">
+      <div class="dashboard__charts">
         <!-- 支出分布饼图 -->
-        <div class="card">
-          <div class="card-header">
-            <h3 class="card-title">支出分布</h3>
-          </div>
-          <div class="card-body">
-            <div ref="expenseChartRef" class="chart-container" style="height: 300px;"></div>
-          </div>
-        </div>
+        <Card>
+          <template #header>
+            <h3 class="card__title">支出分布</h3>
+          </template>
+          <template #body>
+            <div ref="expenseChartRef" class="dashboard__chart-container"></div>
+          </template>
+        </Card>
         
         <!-- 收支趋势图 -->
-        <div class="card">
-          <div class="card-header">
-            <h3 class="card-title">收支趋势</h3>
-          </div>
-          <div class="card-body">
-            <div ref="trendChartRef" class="chart-container" style="height: 300px;"></div>
-          </div>
-        </div>
+        <Card>
+          <template #header>
+            <h3 class="card__title">收支趋势</h3>
+          </template>
+          <template #body>
+            <div ref="trendChartRef" class="dashboard__chart-container"></div>
+          </template>
+        </Card>
       </div>
     </div>
     
     <!-- 最近交易区域 -->
-    <div class="content-section">
-      <div class="card-header">
-        <h2 class="section-title m-0">最近交易</h2>
-        <router-link to="/expense" class="btn btn-secondary btn-sm">查看全部</router-link>
+    <div class="dashboard__section">
+      <div class="dashboard__section-header">
+        <h2 class="dashboard__title">最近交易</h2>
+        <router-link to="/expense" class="btn btn--secondary btn--small">查看全部</router-link>
       </div>
       
-      <div class="card">
-        <div class="overflow-x-auto">
-          <table class="data-table">
+      <Card>
+        <div class="dashboard__table-wrapper">
+          <table class="dashboard__table">
             <thead>
               <tr>
                 <th>日期</th>
@@ -121,11 +124,11 @@
                     </span>
                   </td>
                   <td>
-                    <span class="badge" :class="transaction.type === 'income' ? 'badge-success' : 'badge-danger'">
+                    <span class="badge" :class="transaction.type === 'income' ? 'badge--success' : 'badge--danger'">
                       {{ transaction.type === 'income' ? '收入' : '支出' }}
                     </span>
                   </td>
-                  <td :class="transaction.type === 'income' ? 'text-success' : 'text-danger'">
+                  <td :class="transaction.type === 'income' ? 'dashboard__text-success' : 'dashboard__text-danger'">
                     {{ transaction.type === 'income' ? '+' : '-' }}{{ formatCurrency(transaction.amount) }}
                   </td>
                   <td>
@@ -137,26 +140,29 @@
               </template>
               <tr v-else>
                 <td colspan="6" class="text-center py-6">
-                  <div class="empty-state">
-                    <div class="empty-state-icon">📝</div>
-                    <div class="empty-state-title">暂无交易记录</div>
-                    <div class="empty-state-description">开始添加您的第一笔交易</div>
+                  <div class="dashboard__empty-state">
+                    <div class="dashboard__empty-icon">📝</div>
+                    <div class="dashboard__empty-title">暂无交易记录</div>
+                    <div class="dashboard__empty-description">开始添加您的第一笔交易</div>
                   </div>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
-      </div>
+      </Card>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { useFinanceStore } from '@/stores/finance'
 import { useSettingsStore } from '@/stores/settings'
 import * as echarts from 'echarts'
+import Card from '@/components/common/Card.vue'
+import type { Expense, Income, Debt, Category } from '@/types/finance'
 
 // 响应式引用
 const expenseChartRef = ref<HTMLElement>()
@@ -168,18 +174,30 @@ const trendChart = ref<echarts.ECharts>()
 const financeStore = useFinanceStore()
 const settingsStore = useSettingsStore()
 
+// 定义交易记录类型
+interface Transaction {
+  id: string
+  date: string
+  description: string
+  amount: number
+  category?: string
+  source?: string
+  type: 'income' | 'expense'
+  status: string
+}
+
 // 计算属性：最近交易记录（合并收入和支出）
-const recentTransactions = computed(() => {
+const recentTransactions = computed<Transaction[]>(() => {
   // 合并收入和支出数据
-  const transactions = [
+  const transactions: Transaction[] = [
     ...financeStore.incomes.map(income => ({
       ...income,
-      type: 'income',
+      type: 'income' as const,
       status: 'completed'
     })),
     ...financeStore.expenses.map(expense => ({
       ...expense,
-      type: 'expense',
+      type: 'expense' as const,
       status: 'completed'
     }))
   ]
@@ -207,7 +225,7 @@ const formatDate = (dateString: string): string => {
 }
 
 // 方法：获取类别徽章样式
-const getCategoryBadgeStyle = (categoryName: string) => {
+const getCategoryBadgeStyle = (categoryName: string): { backgroundColor: string, color: string } => {
   const category = financeStore.categories.find(c => c.name === categoryName)
   return {
     backgroundColor: category ? category.color : 'var(--text-tertiary)',
@@ -219,13 +237,13 @@ const getCategoryBadgeStyle = (categoryName: string) => {
 const getTransactionStatusClass = (status: string): string => {
   switch (status) {
     case 'completed':
-      return 'badge-success'
+      return 'badge--success'
     case 'pending':
-      return 'badge-warning'
+      return 'badge--warning'
     case 'failed':
-      return 'badge-danger'
+      return 'badge--danger'
     default:
-      return 'badge-secondary'
+      return 'badge--secondary'
   }
 }
 
@@ -440,23 +458,167 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.dashboard-view {
+.dashboard {
   animation: fadeIn 0.3s ease-out;
 }
 
-.chart-container {
+.dashboard__section {
+  margin-bottom: var(--spacing-lg);
+}
+
+.dashboard__title {
+  margin-bottom: var(--spacing-md);
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.dashboard__cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.dashboard__stats-card {
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-lg);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard__stats-card:hover {
+  transform: translateY(-2px);
+}
+
+.dashboard__stats-icon {
+  font-size: 2rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.dashboard__stats-value {
+  font-size: var(--font-size-2xl);
+  font-weight: 600;
+  margin-bottom: var(--spacing-xs);
+  color: var(--text-primary);
+}
+
+.dashboard__stats-label {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.dashboard__stats-change {
+  font-size: var(--font-size-xs);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.dashboard__stats-change--positive {
+  color: var(--success-color);
+}
+
+.dashboard__stats-change--negative {
+  color: var(--danger-color);
+}
+
+.dashboard__charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.dashboard__chart-container {
   width: 100%;
-  min-height: 300px;
+  height: 300px;
+}
+
+.dashboard__section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.dashboard__table-wrapper {
+  overflow-x: auto;
+}
+
+.dashboard__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.dashboard__table th,
+.dashboard__table td {
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.dashboard__table th {
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.dashboard__empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.dashboard__empty-icon {
+  font-size: 2.5rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.dashboard__empty-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.dashboard__empty-description {
+  color: var(--text-secondary);
+}
+
+.dashboard__text-success {
+  color: var(--success-color);
+}
+
+.dashboard__text-danger {
+  color: var(--danger-color);
 }
 
 /* 适配暗色模式的图表样式 */
 .dark-theme :deep(.echarts-tooltip) {
-  background-color: var(--card-color) !important;
+  background-color: var(--bg-secondary) !important;
   border-color: var(--border-color) !important;
   color: var(--text-primary) !important;
 }
 
 .dark-theme :deep(.echarts-legend-item) {
   color: var(--text-primary) !important;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .dashboard__cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .dashboard__charts {
+    grid-template-columns: 1fr;
+  }
+  
+  .dashboard__section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+  }
 }
 </style>
